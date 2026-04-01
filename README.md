@@ -78,7 +78,15 @@ Sentiment Analysis ML/
 - "Worst customer service ever." → **Negative**
 - "It works as expected." → **Neutral**
 
-## 🛠️ Features
+## Screenshots
+
+| Input Interface | Sentiment Result |
+|----------------|------------------|
+| ![Input](screenshots/input.png) | ![Result](screenshots/result.png) |
+
+> **To add screenshots:** Run `streamlit run app.py`, enter sample text, and save screenshots in the `screenshots/` folder.
+
+## Features
 
 - **Real-time sentiment prediction** with confidence scores
 - **Beautiful UI** built with Streamlit
