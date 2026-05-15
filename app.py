@@ -59,9 +59,29 @@ st.markdown(
 
 @st.cache_resource
 def load_models():
-    """Load the pre-trained model and TF-IDF vectorizer."""
-    model = joblib.load("models/sentiment_model_ml.pkl")
+    """Load or retrain the model and TF-IDF vectorizer."""
+    import os
+    from sklearn.linear_model import LogisticRegression
+
     tfidf = joblib.load("models/tfidf_ml.pkl")
+
+    model_path = "models/sentiment_model_ml.pkl"
+    if os.path.exists(model_path):
+        model = joblib.load(model_path)
+    else:
+        # Model pkl too large for git — retrain Logistic Regression on startup
+        df = pd.read_csv(
+            "Dataset/twitter_training.csv",
+            header=None,
+            names=["id", "topic", "sentiment", "text"],
+        )
+        df = df.dropna(subset=["text", "sentiment"])
+        df = df[df["sentiment"].isin(["Positive", "Negative", "Neutral"])]
+        X = tfidf.transform(df["text"].apply(preprocess_text))
+        y = df["sentiment"]
+        model = LogisticRegression(max_iter=1000, C=1.0)
+        model.fit(X, y)
+
     return model, tfidf
 
 
